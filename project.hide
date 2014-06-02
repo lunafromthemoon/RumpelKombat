@@ -1,0 +1,26 @@
+{
+     "type" : 1
+    ,"target" : null
+    ,"name" : "/RumpelKombat"
+    ,"main" : null
+    ,"projectPackage" : null
+    ,"company" : null
+    ,"license" : null
+    ,"url" : null
+    ,"targetData" : [
+
+    ]
+    ,"files" : [
+         "project.xml"
+        ,"../../../../../../usr/lib/haxe/lib/HIDE/0,3,9/core/light.css"
+    ]
+    ,"activeFile" : "../../../../../../usr/lib/haxe/lib/HIDE/0,3,9/core/light.css"
+    ,"openFLTarget" : "flash"
+    ,"runActionType" : 2
+    ,"runActionText" : "haxelib run lime run \"%path%\" flash"
+    ,"buildActionCommand" : "haxelib run lime build \"%path%\" flash --connect 5000"
+    ,"hiddenItems" : [
+
+    ]
+    ,"showHiddenItems" : false
+}

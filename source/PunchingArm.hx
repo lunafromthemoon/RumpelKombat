@@ -14,7 +14,7 @@ class PunchingArm
 	var forearm:FlxSprite;
 	var origin:FlxPoint;
 	var fist:FlxPoint;
-	var offset:Float = 8;
+	var offset:Float = 12;
 	var maxLenght:Float;
 	var flxStage:FlxSprite;
 	var stage:PlayState;
