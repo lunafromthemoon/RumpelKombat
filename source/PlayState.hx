@@ -51,64 +51,36 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
-		var newPos:FlxPoint = FlxG.mouse.getScreenPosition();
 
-		// weird math
+		playerDefense();
 
-		var maxAngle:Float = Math.PI/3;
-		var minAngle:Float = 11*Math.PI/6;
-		var maxPosBottom :FlxPoint = new FlxPoint ( 237, 424 ); 
-		var armPosition :FlxPoint = new FlxPoint ( cholitaPosition.x + armOffset.x, cholitaPosition.y + armOffset.y );
+   		super.update();
+    }
 
-		if (!FlxGeom.vequal(newPos, lastPos)) {
-				var maxRad :Float = FlxGeom.vdistsqr ( armPosition, maxPosBottom );
-				var armAngle :Float = FlxGeom.angle ( armPosition , newPos );
+    public function playerDefense():Void 
+    {
+    	var newPos:FlxPoint = FlxG.mouse.getScreenPosition();
 
-				if (armAngle <= maxAngle && armAngle >= maxAngle)
-				{
-					var armPoint :FlxPoint = FlxGeom.vPoint ( armPosition , maxRad , armAngle );
-					armFront.setFist(armPoint);
-					armBack.setFist(new FlxPoint(armPoint.x - armDistance.x,armPoint.y-armDistance.y));
-					trace (armPoint);
-				}
-		
-		/* mouseStart:
+	   	// weird math
 
-		x = 245 y = 330
+	   	var maxAngle:Float = Math.PI/3;
+	   	var minAngle:Float = -Math.PI/6;
+	   	var maxPosBottom :FlxPoint = new FlxPoint ( 285, 276 );
+	   	var armPosition :FlxPoint = new FlxPoint ( cholitaPosition.x + armOffset.x, cholitaPosition.y + armOffset.y );
 
-		mouseMoves:
-
-		x = 265 y = 350
-
-		mouse end: 
-
-		x = 320 y = 404
-
-		lowermouse: x= 290 y = 475
-
-		topmouse: x= 395 y = 165
-
-
-		*/
-		//if (newPos.y > lastPos.y) {
-			////mouse going south
-			//
-			//if (arm.angle < 100) {
-				//arm.angle += 10;
-				////arm.updateHitbox();
-			//}
-			//
-			////trace(counter++ +" "+arm.angle);
-		//} else if (newPos.y < lastPos.y) {
-			////mouse going north
-			//if (arm.angle > -80) {
-				//arm.angle -= 10;
-				////arm.updateHitbox();
-			//}	
-			////trace(counter++ +" "+arm.angle);
-		//}
-		lastPos = newPos;
-		super.update();
-	}	
-	}
+	   	if (!FlxGeom.vequal(newPos, lastPos)) {
+	   		trace (newPos);
+	   		var maxRad :Float = FlxGeom.vdistsqr ( armPosition, maxPosBottom );
+	   		var armAngle :Float = FlxGeom.angle ( armPosition , newPos );
+	   		trace(armAngle);
+	   		if (armAngle <= maxAngle && armAngle >= minAngle)
+	   		{
+	   			var armPoint :FlxPoint = FlxGeom.vPoint ( armPosition , maxRad , -armAngle );
+	   			armFront.setFist(armPoint);
+	   			armBack.setFist(new FlxPoint(armPoint.x - armDistance.x,armPoint.y-armDistance.y));
+	   			 
+	   		}
+	   	 }    
+	   	 lastPos = newPos;
+    }
 }
