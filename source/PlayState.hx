@@ -7,8 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
-import flixel.util.FlxRandom;
-
+import Stake;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
@@ -22,7 +21,6 @@ class PlayState extends FlxState
 	var counter:Int = 0;
 	var armOffset = new FlxPoint (55, 185);
 	var cholitaPosition = new FlxPoint (115, 125); //x= 184 y=315
-	var playerStake :Int = 0;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -37,13 +35,10 @@ class PlayState extends FlxState
 		cholita = new FlxSprite(cholitaPosition.x, cholitaPosition.y, "assets/images/cholita.png");
 		add(cholita);
 		armFront = new PunchingArm(armPositionX, armPositionY, "assets/images/antebrazo.png", "assets/images/punio.png", this);
-		var rockButton :FlxButton = new FlxButton ( 325, 350, "Rock", choseRock );
-		var paperButton :FlxButton = new FlxButton ( 325, 375, "Paper", chosePaper );
-		var scissorsButton :FlxButton = new FlxButton ( 325, 400, "Scissors", choseScissors );
-		add( rockButton );
-		add ( paperButton );
-		add ( scissorsButton );
+		var stakes :Stake = new Stake (this);
+
 		super.create();
+
 	}
 	
 	/**
@@ -88,56 +83,5 @@ class PlayState extends FlxState
 	   		}
 	   	 }    
 	   	 lastPos = newPos;
-    }
-
-    public function decideStakes ( playerStake:Int, enemyStake:Int ) {
-
-    	var next :Int = (playerStake + 1) % 3;
-    	
-    	if ( playerStake == enemyStake ) {
-
-    		trace ( "draw!" );
-
-    	} else if ( enemyStake == next ) {
-
-    		trace ( "enemy attack!" );
-    		trace ( "player defense!" );
-    		playerDefense();
-    	
-    	} else {
-
-    		trace ( "player attack!" );
-    		trace ( "enemy defense!" );
-    	} 
-    }
-
-    public function choseRock() {
-
-    	var enemyStake :Int = FlxRandom.intRanged ( 0, 2);
-    	playerStake = 0;
-    	
-    	decideStakes (playerStake, enemyStake);
-
-		trace ( "enemyStake: " + enemyStake + " " + "playerStake" + playerStake );
-    }
-
-    public function chosePaper() {
-
-    	var enemyStake :Int = FlxRandom.intRanged ( 0, 2);
-    	playerStake = 1;
-
-    	decideStakes (playerStake, enemyStake);
-		
-		trace ( "enemyStake: " + enemyStake + " " + "playerStake" + playerStake );
-    }
-
-    public function choseScissors() {
-
-        var enemyStake :Int = FlxRandom.intRanged ( 0, 2);
-    	playerStake = 2;
-    	
-    	decideStakes (playerStake, enemyStake);
-		
-		trace ( "enemyStake: " + enemyStake + " " + "playerStake" + playerStake );	
     }
 }
