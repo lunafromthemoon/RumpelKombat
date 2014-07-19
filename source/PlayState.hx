@@ -7,6 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
+import haxe.EnumFlags;
 import Stake;
 /**
  * A FlxState which can be used for the actual gameplay.
@@ -18,15 +19,19 @@ class PlayState extends FlxState
 	var armFront:PunchingArm;
 	var armBack:PunchingArm;
 	var armDistance:FlxPoint = new FlxPoint(-47, 5);
-	var counter:Int = 0;
 	var armOffset = new FlxPoint (55, 185);
 	var cholitaPosition = new FlxPoint (115, 125); //x= 184 y=315
+	public var flags = new EnumFlags<State>();
+	var stakes :Stake;
+	var playerLife :Int = 20;
+	var enemyLife: Int = 20;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
 	 */
 	override public function create():Void
 	{
+		
 		var armPositionX :Float = cholitaPosition.x + armOffset.x;
 		var armPositionY :Float = cholitaPosition.y + armOffset.y;
 		var background = new FlxSprite (0,0, "assets/images/cafeteria.png");
@@ -35,7 +40,8 @@ class PlayState extends FlxState
 		cholita = new FlxSprite(cholitaPosition.x, cholitaPosition.y, "assets/images/cholita.png");
 		add(cholita);
 		armFront = new PunchingArm(armPositionX, armPositionY, "assets/images/antebrazo.png", "assets/images/punio.png", this);
-		var stakes :Stake = new Stake (this);
+		flags.set(RockGame);
+		stakes = new Stake (this);
 
 		super.create();
 
@@ -55,7 +61,40 @@ class PlayState extends FlxState
 	 */
 	override public function update():Void
 	{
+   		
+		checkState();
+
    		super.update();
+    }
+
+    public function checkState()
+    {
+		if ( flags.has(RockGame) )
+		{
+			stakes.startRockGame(this);
+			flags.unset(RockGame);
+
+		} else if ( flags.has(Combat) )
+		{
+			setCombatPosition (stakes.rockGameResult);
+		}
+    }
+
+    public function setCombatPosition( status :Int )
+    {
+
+    		if ( status == 0 )
+    		{
+    			trace ( "draw!" );
+    		} else if ( status == 1 )
+    		{
+    			trace ( "playerDefends" );
+    		} else {
+    			trace ( "playerAttacks" );
+    		}
+
+    		flags.unset(Combat);
+    		flags.set(RockGame);
     }
 
     public function playerDefense():Void 
