@@ -23,20 +23,20 @@ class Stake
 		rockGameResult = 0;
 	}
 
-	public function startRockGame ( stage:PlayState )
+	public function startRockGame ()
 	{
 		rockGameResult = 0;
 		
-		stage.add( rockButton );
-		stage.add( paperButton );
-		stage.add( scissorsButton );
+		currentStage.add( rockButton );
+		currentStage.add( paperButton );
+		currentStage.add( scissorsButton );
 	}
 
-	public function endRockGame ( stage:PlayState )
+	public function endRockGame ()
 	{
-		stage.remove( rockButton );
-		stage.remove( paperButton );
-		stage.remove( scissorsButton );
+		currentStage.remove( rockButton );
+		currentStage.remove( paperButton );
+		currentStage.remove( scissorsButton );
 	}
 
 	public function decideStakes ( playerStake:Int, enemyStake:Int ) 
@@ -52,16 +52,18 @@ class Stake
     	} else if ( enemyStake == next ) {
 
     		rockGameResult = 1;
+            currentStage.gameState = Defend;
+            endRockGame ();
     		trace ( "enemy" );
     	
     	} else {
 
     		rockGameResult = 2;
-    		trace ( "player" );
+            currentStage.gameState = Attack;
+    		endRockGame ();
+            trace ( "player" );
     	}
 
-    	endRockGame ( currentStage );
-    	currentStage.flags.set ( Combat );
     }
 
     public function choseRock() 

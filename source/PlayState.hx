@@ -21,7 +21,7 @@ class PlayState extends FlxState
 	var armDistance:FlxPoint = new FlxPoint(-47, 5);
 	var armOffset = new FlxPoint (55, 185);
 	var cholitaPosition = new FlxPoint (115, 125); //x= 184 y=315
-	public var flags = new EnumFlags<State>();
+	public var gameState :State = State.RockGame;
 	var stakes :Stake;
 	var playerLife :Int = 20;
 	var enemyLife: Int = 20;
@@ -40,8 +40,8 @@ class PlayState extends FlxState
 		cholita = new FlxSprite(cholitaPosition.x, cholitaPosition.y, "assets/images/cholita.png");
 		add(cholita);
 		armFront = new PunchingArm(armPositionX, armPositionY, "assets/images/antebrazo.png", "assets/images/punio.png", this);
-		flags.set(RockGame);
 		stakes = new Stake (this);
+		stakes.startRockGame();
 
 		super.create();
 
@@ -62,39 +62,16 @@ class PlayState extends FlxState
 	override public function update():Void
 	{
    		
-		checkState();
+		if ( gameState == State.Attack ) 
+		{
+			playerAttack();
+
+		} else if ( gameState == Defend )
+		{
+			playerDefense();
+		} 
 
    		super.update();
-    }
-
-    public function checkState()
-    {
-		if ( flags.has(RockGame) )
-		{
-			stakes.startRockGame(this);
-			flags.unset(RockGame);
-
-		} else if ( flags.has(Combat) )
-		{
-			setCombatPosition (stakes.rockGameResult);
-		}
-    }
-
-    public function setCombatPosition( status :Int )
-    {
-
-    		if ( status == 0 )
-    		{
-    			trace ( "draw!" );
-    		} else if ( status == 1 )
-    		{
-    			trace ( "playerDefends" );
-    		} else {
-    			trace ( "playerAttacks" );
-    		}
-
-    		flags.unset(Combat);
-    		flags.set(RockGame);
     }
 
     public function playerDefense():Void 
@@ -122,5 +99,25 @@ class PlayState extends FlxState
 	   		}
 	   	 }    
 	   	 lastPos = newPos;
+    }
+
+    public function playerAttack():Void
+    {
+    	var newPos:FlxPoint = FlxG.mouse.getScreenPosition();
+
+	   	// weird math
+
+	   	var fixedX :Int = 237;
+	   	var minY :Int = 260;
+	   	var maxY :Int = 405;
+	   	var armPosition :FlxPoint = new FlxPoint ( cholitaPosition.x + armOffset.x, cholitaPosition.y + armOffset.y );
+
+	   	if (!FlxGeom.vequal(newPos, lastPos)) {
+	   		trace (newPos);
+	   			armFront.setFist(new FlxPoint (fixedX, Math.max( Math.min( newPos.y, maxY), minY ) ) );
+	   			armBack.setFist(new FlxPoint(241, 423));
+	   			 
+	   	 }    
+	   	 lastPos = newPos;    	
     }
 }

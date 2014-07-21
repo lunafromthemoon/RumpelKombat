@@ -5,6 +5,7 @@ enum State
 {
 
 	RockGame;
-	Combat;
+	Attack;
+	Defend;
 
 }
