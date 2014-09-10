@@ -9,13 +9,15 @@ import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
 import haxe.EnumFlags;
 import Stake;
+import flixel.ui.FlxBar;
+import characters.Cholita;
 /**
  * A FlxState which can be used for the actual gameplay.
  */
 class PlayState extends FlxState
 {
 	var lastPos:FlxPoint = new FlxPoint(0, 0);
-	var cholita:FlxSprite;
+	var cholita:Cholita;
 	var armFront:PunchingArm;
 	var armBack:PunchingArm;
 	var armDistance:FlxPoint = new FlxPoint(-47, 5);
@@ -23,8 +25,7 @@ class PlayState extends FlxState
 	var cholitaPosition = new FlxPoint (115, 125); //x= 184 y=315
 	public var gameState :State = State.RockGame;
 	var stakes :Stake;
-	var playerLife :Int = 20;
-	var enemyLife: Int = 20;
+	var playerBar: FlxBar;
 
 	/**
 	 * Function that is called up when to state is created to set it up. 
@@ -37,9 +38,15 @@ class PlayState extends FlxState
 		var background = new FlxSprite (0,0, "assets/images/cafeteria.png");
 		add(background);
 		armBack = new PunchingArm(armPositionX-armDistance.x, armPositionY-armDistance.y, "assets/images/antebrazo.png", "assets/images/punio.png",this);
-		cholita = new FlxSprite(cholitaPosition.x, cholitaPosition.y, "assets/images/cholita.png");
+		cholita = new Cholita(cholitaPosition.x, cholitaPosition.y, "assets/images/cholita.png");
 		add(cholita);
 		armFront = new PunchingArm(armPositionX, armPositionY, "assets/images/antebrazo.png", "assets/images/punio.png", this);
+		cholita.hp = 99;
+		playerBar = new FlxBar(15, 20 , FlxBar.FILL_LEFT_TO_RIGHT , 100 , 25 , null , 0 , 100 , false );
+		playerBar.createFilledBar( 0xFFB2000B , 0xFF0BFF47 , false );
+		playerBar.currentValue = cholita.hp;
+		add(playerBar);
+		playerBar.update();
 		stakes = new Stake (this);
 		stakes.startRockGame();
 
@@ -70,7 +77,6 @@ class PlayState extends FlxState
 		{
 			playerDefense();
 		} 
-
    		super.update();
     }
 
